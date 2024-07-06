@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "store-api"
+name = "store_api"
 version = "0.1.0"
 description = ""
 authors = ["Samuel Fujimoto <fujimoto.samuel@gmail.com>"]
