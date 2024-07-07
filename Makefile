@@ -9,3 +9,6 @@ format-lint:
 
 run:
 	@poetry run uvicorn store_api.main:app --reload
+
+test:
+	@poetry run pytest

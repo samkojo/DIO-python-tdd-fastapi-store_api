@@ -1,0 +1,16 @@
+# serializer version: 1
+# name: test_schemas_return_raise
+  dict({
+    'input': dict({
+      'name': 'iPhone 14',
+      'price': 8500,
+      'quantity': 10,
+    }),
+    'loc': tuple(
+      'status',
+    ),
+    'msg': 'Field required',
+    'type': 'missing',
+    'url': 'https://errors.pydantic.dev/2.8/v/missing',
+  })
+# ---
