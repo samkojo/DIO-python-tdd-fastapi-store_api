@@ -19,6 +19,17 @@ ruff = "^0.5.1"
 pytest = "^8.2.2"
 pytest-asyncio = "^0.23.7"
 pre-commit = "^3.7.1"
+syrupy = "^4.6.1"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = [
+  "--strict-config",
+  "--strict-markers",
+  "--ignore=docs_src",
+]
+xfail_strict = true
+junit_family = "xunit2"
 
 [build-system]
 requires = ["poetry-core"]
