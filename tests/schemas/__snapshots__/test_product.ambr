@@ -2,8 +2,8 @@
 # name: test_schemas_return_raise
   dict({
     'input': dict({
-      'name': 'iPhone 14',
-      'price': 8500,
+      'name': 'Iphone 14 Pro Max',
+      'price': 8.5,
       'quantity': 10,
     }),
     'loc': tuple(

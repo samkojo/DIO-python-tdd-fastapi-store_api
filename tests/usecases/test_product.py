@@ -1,36 +1,41 @@
+from typing import List
 from uuid import UUID
 
 import pytest
 from store_api.core.exceptions import NotFoundException
 from store_api.schemas.product import ProductOut, ProductUpdateOut
 from store_api.usecases.product import product_usecase
-from tests.factories import product_data
-# from tests.factories import product_data
+
 
 async def test_usecases_create_should_return_success(product_in):
     result = await product_usecase.create(body=product_in)
 
     assert isinstance(result, ProductOut)
-    assert result.name == product_data()['name']
+    assert result.name == "Iphone 14 Pro Max"
 
-async def test_usecases_get_should_return_success(product_id):
-    result = await product_usecase.get(id=product_id)
+
+async def test_usecases_get_should_return_success(product_inserted):
+    result = await product_usecase.get(id=product_inserted.id)
 
     assert isinstance(result, ProductOut)
-    assert result.name == product_data()['name']
+    assert result.name == "Iphone 14 Pro Max"
+
 
 async def test_usecases_get_should_not_found():
-    
-    with pytest.raises(Exception) as err:
-        await product_usecase.get(id=UUID('123ad3a9-3b07-4ee3-baa8-2df6fcb074ce'))
+    with pytest.raises(NotFoundException) as err:
+        await product_usecase.get(id=UUID("1e4f214e-85f7-461a-89d0-a751a32e3bb9"))
 
-    assert err.value.message == 'Product not found with filter: 123ad3a9-3b07-4ee3-baa8-2df6fcb074ce'
+    assert (
+        err.value.message
+        == "Product not found with filter: 1e4f214e-85f7-461a-89d0-a751a32e3bb9"
+    )
+
 
 @pytest.mark.usefixtures("products_inserted")
 async def test_usecases_query_should_return_success():
     result = await product_usecase.query()
 
-    assert isinstance(result, list)
+    assert isinstance(result, List)
     assert len(result) > 1
 
 

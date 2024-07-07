@@ -1,13 +1,12 @@
 from typing import List
 from uuid import UUID
-from bson import Binary, UuidRepresentation
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 import pymongo
 from store_api.db.mongo import db_client
 from store_api.models.product import ProductModel
 from store_api.schemas.product import ProductIn, ProductOut, ProductUpdate, ProductUpdateOut
 from store_api.core.exceptions import NotFoundException
-
+from bson import Binary, UuidRepresentation
 
 class ProductUsecase:
     def __init__(self) -> None:
@@ -26,7 +25,7 @@ class ProductUsecase:
         result = await self.collection.find_one({"id": id_binary})
 
         if not result:
-            raise NotFoundException(message=f"Product not found with id: {id}")
+            raise NotFoundException(message=f"Product not found with filter: {id}")
 
         return ProductOut(**result)
 
@@ -34,8 +33,9 @@ class ProductUsecase:
         return [ProductOut(**item) async for item in self.collection.find()]
 
     async def update(self, id: UUID, body: ProductUpdate) -> ProductUpdateOut:
+        id_binary = Binary.from_uuid(id, UuidRepresentation.STANDARD)
         result = await self.collection.find_one_and_update(
-            filter={"id": id},
+            filter={"id": id_binary},
             update={"$set": body.model_dump(exclude_none=True)},
             return_document=pymongo.ReturnDocument.AFTER,
         )
@@ -43,11 +43,12 @@ class ProductUsecase:
         return ProductUpdateOut(**result)
 
     async def delete(self, id: UUID) -> bool:
-        product = await self.collection.find_one({"id": id})
+        id_binary = Binary.from_uuid(id, UuidRepresentation.STANDARD)
+        product = await self.collection.find_one({"id": id_binary})
         if not product:
             raise NotFoundException(message=f"Product not found with filter: {id}")
 
-        result = await self.collection.delete_one({"id": id})
+        result = await self.collection.delete_one({"id": id_binary})
 
         return True if result.deleted_count > 0 else False
 

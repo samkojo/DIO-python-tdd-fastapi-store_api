@@ -1,6 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
-from bson import Decimal128
+from uuid import UUID
+from bson import Decimal128, Binary
 from pydantic import UUID4, BaseModel, Field, model_validator
 
 
@@ -19,6 +20,6 @@ class OutSchema(BaseModel):
         for key, value in data.items():
             if isinstance(value, Decimal128):
                 data[key] = Decimal(str(value))
-            # elif isinstance(value, Binary):
-            #     data[key]=uuid4(int=int.from_bytes(value, 'little'))
+            elif isinstance(value, Binary):
+                data[key]=UUID(bytes=value)
         return data

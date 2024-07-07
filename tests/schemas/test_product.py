@@ -1,19 +1,19 @@
-
 from pydantic import ValidationError
+
 import pytest
 from store_api.schemas.product import ProductIn
 from tests.factories import product_data
 
 
-def test_schemas_validated():
+def test_schemas_return_success():
     data = product_data()
-    # product = ProductIn(**data)
     product = ProductIn.model_validate(data)
 
-    assert product.name == 'iPhone 14'
+    assert product.name == "Iphone 14 Pro Max"
+
 
 def test_schemas_return_raise(snapshot):
-    data = {'name':'iPhone 14', 'quantity':10, 'price':8500}
+    data = {"name": "Iphone 14 Pro Max", "quantity": 10, "price": 8.500}
 
     with pytest.raises(ValidationError) as err:
         ProductIn.model_validate(data)
