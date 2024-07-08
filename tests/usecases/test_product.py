@@ -14,6 +14,17 @@ async def test_usecases_create_should_return_success(product_in):
     assert result.name == "Iphone 14 Pro Max"
 
 
+# Nao consegui simular
+# async def test_usecases_create_should_return_exception(product_in):
+#     with pytest.raises(DBInsertException) as err:
+#         await product_usecase.create(body=product_in)
+
+#     assert (
+#         err.value.message
+#         == 'Fail to insert in DB'
+#     )
+
+
 async def test_usecases_get_should_return_success(product_inserted):
     result = await product_usecase.get(id=product_inserted.id)
 

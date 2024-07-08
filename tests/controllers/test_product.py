@@ -23,6 +23,16 @@ async def test_controller_create_should_return_success(client, products_url):
     }
 
 
+# Nao consegui simular
+# async def test_controller_create_should_return_exception(client, products_url):
+#     response = await client.post(products_url, json=product_data())
+
+#     assert response.status_code == status.HTTP_400_BAD_REQUEST
+#     assert response.json() == {
+#         "detail": 'Fail to insert in DB'
+#     }
+
+
 async def test_controller_get_should_return_success(
     client, products_url, product_inserted
 ):

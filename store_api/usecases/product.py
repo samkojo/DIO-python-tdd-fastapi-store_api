@@ -11,7 +11,7 @@ from store_api.schemas.product import (
     ProductUpdate,
     ProductUpdateOut,
 )
-from store_api.core.exceptions import NotFoundException
+from store_api.core.exceptions import DBInsertException, NotFoundException
 from bson import Binary, Decimal128, UuidRepresentation
 
 
@@ -23,7 +23,10 @@ class ProductUsecase:
 
     async def create(self, body: ProductIn) -> ProductOut:
         product_model = ProductModel(**body.model_dump())
-        await self.collection.insert_one(product_model.model_dump())
+        try:
+            await self.collection.insert_one(product_model.model_dump())
+        except Exception:
+            raise DBInsertException()
 
         return ProductOut(**product_model.model_dump())
 

@@ -14,7 +14,7 @@ API with FastAPI - TDD - DIO (<https://web.dio.me/play>) for 'Python A.I. Backen
 ## Funcionalidades
 
 - Create
-  - [ ] Mapear uma exceção, caso dê algum erro de inserção e capturar na controller
+  - [x] Mapear uma exceção, caso dê algum erro de inserção e capturar na controller
 - Update
   - [ ] Modifique o método de patch para retornar uma exceção de Not Found, quando o dado não for encontrado
   - [ ] a exceção deve ser tratada na controller, pra ser retornada uma mensagem amigável pro usuário

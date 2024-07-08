@@ -2,7 +2,7 @@ from decimal import Decimal
 from typing import Annotated, List, Optional
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, status
 from pydantic import UUID4
-from store_api.core.exceptions import NotFoundException
+from store_api.core.exceptions import DBInsertException, NotFoundException
 
 from store_api.schemas.product import (
     ProductIn,
@@ -19,7 +19,10 @@ router = APIRouter(tags=["products"])
 async def post(
     body: ProductIn = Body(...), usecase: ProductUsecase = Depends()
 ) -> ProductOut:
-    return await usecase.create(body=body)
+    try:
+        return await usecase.create(body=body)
+    except DBInsertException as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=exc.message)
 
 
 @router.get(path="/{id}", status_code=status.HTTP_200_OK)
