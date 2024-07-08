@@ -61,6 +61,55 @@ async def test_controller_query_should_return_success(client, products_url):
     assert len(response.json()) > 1
 
 
+@pytest.mark.usefixtures("products_inserted")
+async def test_controller_query_with_price_grater_than_return_success(
+    client, products_url
+):
+    response = await client.get(
+        products_url,
+        params={
+            "price_grater_than": "5.500",
+        },
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response.json(), List)
+    assert len(response.json()) == 2
+
+
+@pytest.mark.usefixtures("products_inserted")
+async def test_controller_query_with_price_less_than_should_return_success(
+    client, products_url
+):
+    response = await client.get(
+        products_url,
+        params={
+            "price_less_than": "10.500",
+        },
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response.json(), List)
+    assert len(response.json()) == 3
+
+
+@pytest.mark.usefixtures("products_inserted")
+async def test_controller_query_with_price_less_grater_should_return_success(
+    client, products_url
+):
+    response = await client.get(
+        products_url,
+        params={
+            "price_grater_than": "5.500",
+            "price_less_than": "10.500",
+        },
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response.json(), List)
+    assert len(response.json()) == 1
+
+
 async def test_controller_patch_should_return_success(
     client, products_url, product_inserted
 ):

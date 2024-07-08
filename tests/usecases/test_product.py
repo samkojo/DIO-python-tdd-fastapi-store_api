@@ -36,7 +36,33 @@ async def test_usecases_query_should_return_success():
     result = await product_usecase.query()
 
     assert isinstance(result, List)
-    assert len(result) > 1
+    assert len(result) == 4
+
+
+@pytest.mark.usefixtures("products_inserted")
+async def test_usecases_query_with_price_grater_than_should_return_success():
+    result = await product_usecase.query(price_grater_than="5.500")
+
+    assert isinstance(result, List)
+    assert len(result) == 2
+
+
+@pytest.mark.usefixtures("products_inserted")
+async def test_usecases_query_with_price_less_than_should_return_success():
+    result = await product_usecase.query(price_less_than="10.500")
+
+    assert isinstance(result, List)
+    assert len(result) == 3
+
+
+@pytest.mark.usefixtures("products_inserted")
+async def test_usecases_query_with_price_less_grater_should_return_success():
+    result = await product_usecase.query(
+        price_grater_than="5.500", price_less_than="10.500"
+    )
+
+    assert isinstance(result, List)
+    assert len(result) == 1
 
 
 async def test_usecases_update_should_return_success(product_up, product_inserted):

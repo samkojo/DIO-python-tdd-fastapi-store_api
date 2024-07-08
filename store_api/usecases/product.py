@@ -1,12 +1,19 @@
+from decimal import Decimal
 from typing import List
 from uuid import UUID
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 import pymongo
 from store_api.db.mongo import db_client
 from store_api.models.product import ProductModel
-from store_api.schemas.product import ProductIn, ProductOut, ProductUpdate, ProductUpdateOut
+from store_api.schemas.product import (
+    ProductIn,
+    ProductOut,
+    ProductUpdate,
+    ProductUpdateOut,
+)
 from store_api.core.exceptions import NotFoundException
-from bson import Binary, UuidRepresentation
+from bson import Binary, Decimal128, UuidRepresentation
+
 
 class ProductUsecase:
     def __init__(self) -> None:
@@ -29,8 +36,18 @@ class ProductUsecase:
 
         return ProductOut(**result)
 
-    async def query(self) -> List[ProductOut]:
-        return [ProductOut(**item) async for item in self.collection.find()]
+    async def query(
+        self, price_grater_than: Decimal = None, price_less_than: Decimal = None
+    ) -> List[ProductOut]:
+        filter = None
+        if price_grater_than or price_less_than:
+            filter = {"price": {}}
+            if price_grater_than:
+                filter["price"]["$gt"] = Decimal128(str(price_grater_than))
+            if price_less_than:
+                filter["price"]["$lt"] = Decimal128(str(price_less_than))
+
+        return [ProductOut(**item) async for item in self.collection.find(filter)]
 
     async def update(self, id: UUID, body: ProductUpdate) -> ProductUpdateOut:
         id_binary = Binary.from_uuid(id, UuidRepresentation.STANDARD)
