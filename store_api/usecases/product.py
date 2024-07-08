@@ -54,6 +54,11 @@ class ProductUsecase:
 
     async def update(self, id: UUID, body: ProductUpdate) -> ProductUpdateOut:
         id_binary = Binary.from_uuid(id, UuidRepresentation.STANDARD)
+
+        product = await self.collection.find_one({"id": id_binary})
+        if not product:
+            raise NotFoundException(message=f"Product not found with filter: {id}")
+
         result = await self.collection.find_one_and_update(
             filter={"id": id_binary},
             update={"$set": body.model_dump(exclude_none=True)},

@@ -83,6 +83,18 @@ async def test_usecases_update_should_return_success(product_up, product_inserte
     assert isinstance(result, ProductUpdateOut)
 
 
+async def test_usecases_update_should_not_found(product_up):
+    with pytest.raises(NotFoundException) as err:
+        await product_usecase.update(
+            id=UUID("1e4f214e-85f7-461a-89d0-a751a32e3bb9"), body=product_up
+        )
+
+    assert (
+        err.value.message
+        == "Product not found with filter: 1e4f214e-85f7-461a-89d0-a751a32e3bb9"
+    )
+
+
 async def test_usecases_delete_should_return_success(product_inserted):
     result = await product_usecase.delete(id=product_inserted.id)
 

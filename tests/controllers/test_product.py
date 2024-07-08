@@ -142,6 +142,17 @@ async def test_controller_patch_should_return_success(
     }
 
 
+async def test_controller_patch_should_return_not_found(client, products_url):
+    response = await client.patch(
+        f"{products_url}1e4f214e-85f7-461a-89d0-a751a32e3bb9", json={"price": "7.500"}
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == {
+        "detail": "Product not found with filter: 1e4f214e-85f7-461a-89d0-a751a32e3bb9"
+    }
+
+
 async def test_controller_delete_should_return_no_content(
     client, products_url, product_inserted
 ):
