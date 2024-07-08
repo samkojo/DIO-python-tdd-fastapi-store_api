@@ -4,7 +4,7 @@ from uuid import UUID
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 import pymongo
 from store_api.db.mongo import db_client
-from store_api.models.product import ProductModel
+from store_api.models.product import ProductModel, ProductUpdateModel
 from store_api.schemas.product import (
     ProductIn,
     ProductOut,
@@ -59,9 +59,10 @@ class ProductUsecase:
         if not product:
             raise NotFoundException(message=f"Product not found with filter: {id}")
 
+        product_model = ProductUpdateModel(**body.model_dump())
         result = await self.collection.find_one_and_update(
             filter={"id": id_binary},
-            update={"$set": body.model_dump(exclude_none=True)},
+            update={"$set": product_model.model_dump(exclude_none=True)},
             return_document=pymongo.ReturnDocument.AFTER,
         )
 

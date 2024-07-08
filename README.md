@@ -17,7 +17,7 @@ API with FastAPI - TDD - DIO (<https://web.dio.me/play>) for 'Python A.I. Backen
   - [x] Mapear uma exceção, caso dê algum erro de inserção e capturar na controller
 - Update
   - [x] Modifique o método de patch para retornar uma exceção de Not Found, quando o dado não for encontrado
-  - [ ] ao alterar um dado, a data de updated_at deve corresponder ao time atual, permitir modificar updated_at também
+  - [x] ao alterar um dado, a data de updated_at deve corresponder ao time atual, permitir modificar updated_at também
 - Filtros
   - [x] aplique um filtro de preço, assim: (price > 5000 and price < 8000)
 
